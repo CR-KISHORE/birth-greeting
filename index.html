@@ -6,15 +6,18 @@
 <title>Happy Birthday Sri Varshini ♡</title>
 
 <!-- ============================================================
-     HOW TO ADD HER PHOTO (Google Drive):
-     1. Upload the photo to Google Drive
-     2. Right-click → Share → "Anyone with the link"
-     3. Copy the link. It looks like:
-        https://drive.google.com/file/d/FILE_ID_HERE/view?usp=sharing
-     4. Take only the FILE_ID_HERE part and paste it into the
-        PHOTO_URL below in this format:
-        https://drive.google.com/thumbnail?id=FILE_ID_HERE&sz=w1000
-     5. Or just paste any direct image URL (ending .jpg/.png)
+     EASIEST WAY — LOCAL "images" FOLDER (recommended):
+     1. Create a folder named  images  next to this HTML file
+     2. Put her main photo as:      images/main.jpg
+     3. Put the 20 heart photos as: images/1.jpg ... images/20.jpg
+        (.jpg, .jpeg or .png all work)
+     That's it — the page finds them automatically.
+
+     ALTERNATIVE — Google Drive links:
+     Share each image as "Anyone with the link", copy the FILE_ID
+     from the link, and paste it below in this format:
+     https://drive.google.com/thumbnail?id=FILE_ID_HERE&sz=w1000
+     (Drive links are used only if no local image is found.)
      ============================================================ -->
 <script>
   // 👇 PASTE YOUR IMAGE LINK BETWEEN THE QUOTES 👇
@@ -420,8 +423,8 @@
           <div class="photo-placeholder">
             <span class="heart">♡</span>
             Her photo goes here.<br>
-            Paste your Google Drive image link<br>
-            in the <b>PHOTO_URL</b> at the top of this file.
+            Add <b>images/main.jpg</b> next to this file,<br>
+            or paste a Drive link in <b>PHOTO_URL</b> at the top.
           </div>
         </div>
       </div>
@@ -568,16 +571,39 @@
     nameEl.appendChild(s);
   });
 
-  /* ---- photo from PHOTO_URL ---- */
-  if (typeof PHOTO_URL !== 'undefined' && PHOTO_URL.trim() !== "") {
-    const inner = document.getElementById('frameInner');
-    inner.innerHTML = "";
+  /* ---- image loader: tries images/NAME.jpg → .jpeg → .png → fallback URL ---- */
+  function loadSmartImage(container, baseName, fallbackUrl, altText, onFail) {
+    const candidates = [
+      'images/' + baseName + '.jpg',
+      'images/' + baseName + '.jpeg',
+      'images/' + baseName + '.png'
+    ];
+    if (fallbackUrl && fallbackUrl.trim() !== "") candidates.push(fallbackUrl.trim());
+    let idx = 0;
     const img = document.createElement('img');
-    img.src = PHOTO_URL.trim();
-    img.alt = "Sri Varshini";
+    img.alt = altText;
     img.referrerPolicy = "no-referrer";
-    inner.appendChild(img);
+    img.style.display = 'none';
+    img.onerror = () => {
+      idx++;
+      if (idx < candidates.length) { img.src = candidates[idx]; }
+      else { img.remove(); if (onFail) onFail(); }
+    };
+    img.onload = () => {
+      container.querySelectorAll('.photo-placeholder, .tile-heart').forEach(el => el.remove());
+      img.style.display = 'block';
+    };
+    img.src = candidates[0];
+    container.appendChild(img);
   }
+
+  /* ---- main photo: images/main.jpg (auto) or PHOTO_URL ---- */
+  loadSmartImage(
+    document.getElementById('frameInner'),
+    'main',
+    (typeof PHOTO_URL !== 'undefined' ? PHOTO_URL : ""),
+    'Sri Varshini'
+  );
 
   /* ---- stars + petals ---- */
   const sky = document.getElementById('sky');
@@ -636,16 +662,15 @@
       tile.className = 'h-tile';
       tile.style.left = px + '%';
       tile.style.top  = py + '%';
-      const url = (typeof HEART_PHOTOS !== 'undefined' && HEART_PHOTOS[i]) ? HEART_PHOTOS[i].trim() : "";
-      if (url) {
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = "memory " + (i + 1);
-        img.referrerPolicy = "no-referrer";
-        tile.appendChild(img);
-      } else {
-        tile.textContent = '♡';
-      }
+      // placeholder heart shown until a real photo loads
+      const ph = document.createElement('span');
+      ph.className = 'tile-heart';
+      ph.textContent = '♡';
+      tile.appendChild(ph);
+      // auto-load images/1.jpg ... images/20.jpg (or .jpeg/.png),
+      // falling back to a HEART_PHOTOS Drive link if provided
+      const fallback = (typeof HEART_PHOTOS !== 'undefined' && HEART_PHOTOS[i]) ? HEART_PHOTOS[i] : "";
+      loadSmartImage(tile, String(i + 1), fallback, "memory " + (i + 1));
       collage.appendChild(tile);
     });
     // pop tiles in one-by-one when scrolled into view
