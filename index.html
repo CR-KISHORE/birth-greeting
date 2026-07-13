@@ -6,18 +6,19 @@
 <title>Happy Birthday Sri Varshini ♡</title>
 
 <!-- ============================================================
-     EASIEST WAY — LOCAL "images" FOLDER (recommended):
-     1. Create a folder named  images  next to this HTML file
-     2. Put her main photo as:      images/main.jpg
-     3. Put the 20 heart photos as: images/1.jpg ... images/20.jpg
-        (.jpg, .jpeg or .png all work)
-     That's it — the page finds them automatically.
+     ADDING PHOTOS — no folder needed, no code editing:
+     Put the images in the SAME folder as this HTML file:
+       main.jpg        → her big framed photo at the top
+       1.jpg, 2.jpg …  → photos for the heart (up to 20)
+     (.jpg, .jpeg or .png all work. An images/ folder also works.)
+
+     Have fewer than 20? No problem — the photos you add will
+     repeat around the heart so it always looks full.
 
      ALTERNATIVE — Google Drive links:
      Share each image as "Anyone with the link", copy the FILE_ID
-     from the link, and paste it below in this format:
+     and paste below as:
      https://drive.google.com/thumbnail?id=FILE_ID_HERE&sz=w1000
-     (Drive links are used only if no local image is found.)
      ============================================================ -->
 <script>
   // 👇 PASTE YOUR IMAGE LINK BETWEEN THE QUOTES 👇
@@ -423,8 +424,8 @@
           <div class="photo-placeholder">
             <span class="heart">♡</span>
             Her photo goes here.<br>
-            Add <b>images/main.jpg</b> next to this file,<br>
-            or paste a Drive link in <b>PHOTO_URL</b> at the top.
+            Put <b>main.jpg</b> in the same folder<br>
+            as this file — it loads automatically.
           </div>
         </div>
       </div>
@@ -571,39 +572,46 @@
     nameEl.appendChild(s);
   });
 
-  /* ---- image loader: tries images/NAME.jpg → .jpeg → .png → fallback URL ---- */
-  function loadSmartImage(container, baseName, fallbackUrl, altText, onFail) {
-    const candidates = [
-      'images/' + baseName + '.jpg',
-      'images/' + baseName + '.jpeg',
-      'images/' + baseName + '.png'
-    ];
-    if (fallbackUrl && fallbackUrl.trim() !== "") candidates.push(fallbackUrl.trim());
-    let idx = 0;
+  /* ---- image loader: tries root folder, then images/ folder ---- */
+  function candidatesFor(baseName) {
+    const exts = ['jpg', 'jpeg', 'png', 'JPG', 'PNG'];
+    const list = [];
+    exts.forEach(e => list.push(baseName + '.' + e));            // same folder as this file
+    exts.forEach(e => list.push('images/' + baseName + '.' + e)); // optional images/ folder
+    return list;
+  }
+  function probe(src) {
+    return new Promise(res => {
+      const im = new Image();
+      im.onload = () => res(src);
+      im.onerror = () => res(null);
+      im.src = src;
+    });
+  }
+  async function findFirst(baseName, fallbackUrl) {
+    for (const c of candidatesFor(baseName)) {
+      const ok = await probe(c);
+      if (ok) return ok;
+    }
+    if (fallbackUrl && fallbackUrl.trim() !== "") {
+      const ok = await probe(fallbackUrl.trim());
+      if (ok) return ok;
+    }
+    return null;
+  }
+  function placeImage(container, src, altText) {
+    container.querySelectorAll('.photo-placeholder, .tile-heart').forEach(el => el.remove());
     const img = document.createElement('img');
+    img.src = src;
     img.alt = altText;
     img.referrerPolicy = "no-referrer";
-    img.style.display = 'none';
-    img.onerror = () => {
-      idx++;
-      if (idx < candidates.length) { img.src = candidates[idx]; }
-      else { img.remove(); if (onFail) onFail(); }
-    };
-    img.onload = () => {
-      container.querySelectorAll('.photo-placeholder, .tile-heart').forEach(el => el.remove());
-      img.style.display = 'block';
-    };
-    img.src = candidates[0];
     container.appendChild(img);
   }
 
-  /* ---- main photo: images/main.jpg (auto) or PHOTO_URL ---- */
-  loadSmartImage(
-    document.getElementById('frameInner'),
-    'main',
-    (typeof PHOTO_URL !== 'undefined' ? PHOTO_URL : ""),
-    'Sri Varshini'
-  );
+  /* ---- main photo: main.jpg in root (or images/), or PHOTO_URL ---- */
+  findFirst('main', (typeof PHOTO_URL !== 'undefined' ? PHOTO_URL : "")).then(src => {
+    if (src) placeImage(document.getElementById('frameInner'), src, 'Sri Varshini');
+  });
 
   /* ---- stars + petals ---- */
   const sky = document.getElementById('sky');
@@ -662,15 +670,10 @@
       tile.className = 'h-tile';
       tile.style.left = px + '%';
       tile.style.top  = py + '%';
-      // placeholder heart shown until a real photo loads
       const ph = document.createElement('span');
       ph.className = 'tile-heart';
       ph.textContent = '♡';
       tile.appendChild(ph);
-      // auto-load images/1.jpg ... images/20.jpg (or .jpeg/.png),
-      // falling back to a HEART_PHOTOS Drive link if provided
-      const fallback = (typeof HEART_PHOTOS !== 'undefined' && HEART_PHOTOS[i]) ? HEART_PHOTOS[i] : "";
-      loadSmartImage(tile, String(i + 1), fallback, "memory " + (i + 1));
       collage.appendChild(tile);
     });
     // pop tiles in one-by-one when scrolled into view
@@ -686,6 +689,28 @@
       });
     }, { threshold: 0.25 });
     heartObs.observe(collage);
+
+    // discover photos 1..20 (root folder or images/), plus main + Drive links.
+    // However many are found, they repeat around the heart so all 20 tiles are full.
+    (async function fillTiles(){
+      const found = [];
+      const probes = [];
+      for (let n = 1; n <= N; n++) {
+        const fallback = (typeof HEART_PHOTOS !== 'undefined' && HEART_PHOTOS[n-1]) ? HEART_PHOTOS[n-1] : "";
+        probes.push(findFirst(String(n), fallback).then(src => ({ n, src })));
+      }
+      const results = await Promise.all(probes);
+      results.sort((a,b) => a.n - b.n).forEach(r => { if (r.src) found.push(r.src); });
+      if (found.length === 0) {
+        // no numbered photos — reuse the main photo so the heart is still hers
+        const mainSrc = await findFirst('main', (typeof PHOTO_URL !== 'undefined' ? PHOTO_URL : ""));
+        if (mainSrc) found.push(mainSrc);
+      }
+      if (found.length === 0) return; // keep the glowing ♡ placeholders
+      tiles.forEach((tile, i) => {
+        placeImage(tile, found[i % found.length], "memory " + (i + 1));
+      });
+    })();
   })();
 
   /* ---- reveal wishes on scroll ---- */
