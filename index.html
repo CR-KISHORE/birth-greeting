@@ -23,11 +23,16 @@
 <script>
   // 👇 YOUR PHOTO FILES (same folder as this HTML file) 👇
   // main.jpg is used automatically for the big frame.
-  // List the heart photos here — add more names anytime:
-  const LOCAL_HEART_FILES = ["hand.jpg", "img2.jpg"];
+  // List the heart photos here — add more names anytime.
+  // (The raw.githubusercontent.com links are backups so the page
+  //  works even when opened outside the repo folder.)
+  const LOCAL_HEART_FILES = [
+    ["hand.jpg", "https://raw.githubusercontent.com/CR-KISHORE/birth-greeting/main/hand.jpg"],
+    ["img2.jpg", "https://raw.githubusercontent.com/CR-KISHORE/birth-greeting/main/img2.jpg"]
+  ];
 
-  // 👇 OPTIONAL: paste a Drive/image link if not using main.jpg 👇
-  const PHOTO_URL = "";
+  // 👇 Backup for the main framed photo 👇
+  const PHOTO_URL = "https://raw.githubusercontent.com/CR-KISHORE/birth-greeting/main/main.jpg";
   // Example:
   // const PHOTO_URL = "https://drive.google.com/thumbnail?id=1AbC2dEfGh3IjKl&sz=w1000";
 
@@ -700,9 +705,17 @@
     // Found photos repeat around the heart so all 20 tiles stay full.
     (async function fillTiles(){
       const found = [];
-      // 1) explicit filenames listed at the top of this file
+      // 1) explicit files listed at the top: each entry is
+      //    [localName, backupUrl] — first one that loads wins
       if (typeof LOCAL_HEART_FILES !== 'undefined') {
-        const named = await Promise.all(LOCAL_HEART_FILES.map(f => probe(f)));
+        const named = await Promise.all(LOCAL_HEART_FILES.map(async entry => {
+          const cands = Array.isArray(entry) ? entry : [entry];
+          for (const c of cands) {
+            const ok = await probe(c);
+            if (ok) return ok;
+          }
+          return null;
+        }));
         named.forEach(src => { if (src) found.push(src); });
       }
       // 2) numbered files + Drive fallbacks
