@@ -21,7 +21,12 @@
      https://drive.google.com/thumbnail?id=FILE_ID_HERE&sz=w1000
      ============================================================ -->
 <script>
-  // 👇 PASTE YOUR IMAGE LINK BETWEEN THE QUOTES 👇
+  // 👇 YOUR PHOTO FILES (same folder as this HTML file) 👇
+  // main.jpg is used automatically for the big frame.
+  // List the heart photos here — add more names anytime:
+  const LOCAL_HEART_FILES = ["hand.jpg", "img2.jpg"];
+
+  // 👇 OPTIONAL: paste a Drive/image link if not using main.jpg 👇
   const PHOTO_URL = "";
   // Example:
   // const PHOTO_URL = "https://drive.google.com/thumbnail?id=1AbC2dEfGh3IjKl&sz=w1000";
@@ -690,19 +695,28 @@
     }, { threshold: 0.25 });
     heartObs.observe(collage);
 
-    // discover photos 1..20 (root folder or images/), plus main + Drive links.
-    // However many are found, they repeat around the heart so all 20 tiles are full.
+    // fill the heart: your named files first (hand.jpg, img2.jpg ...),
+    // then any numbered files (1.jpg..20.jpg), then Drive links.
+    // Found photos repeat around the heart so all 20 tiles stay full.
     (async function fillTiles(){
       const found = [];
+      // 1) explicit filenames listed at the top of this file
+      if (typeof LOCAL_HEART_FILES !== 'undefined') {
+        const named = await Promise.all(LOCAL_HEART_FILES.map(f => probe(f)));
+        named.forEach(src => { if (src) found.push(src); });
+      }
+      // 2) numbered files + Drive fallbacks
       const probes = [];
       for (let n = 1; n <= N; n++) {
         const fallback = (typeof HEART_PHOTOS !== 'undefined' && HEART_PHOTOS[n-1]) ? HEART_PHOTOS[n-1] : "";
         probes.push(findFirst(String(n), fallback).then(src => ({ n, src })));
       }
       const results = await Promise.all(probes);
-      results.sort((a,b) => a.n - b.n).forEach(r => { if (r.src) found.push(r.src); });
+      results.sort((a,b) => a.n - b.n).forEach(r => {
+        if (r.src && !found.includes(r.src)) found.push(r.src);
+      });
       if (found.length === 0) {
-        // no numbered photos — reuse the main photo so the heart is still hers
+        // nothing found — reuse the main photo so the heart is still hers
         const mainSrc = await findFirst('main', (typeof PHOTO_URL !== 'undefined' ? PHOTO_URL : ""));
         if (mainSrc) found.push(mainSrc);
       }
