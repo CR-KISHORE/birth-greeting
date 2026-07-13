@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday Sri Varshini ♡</title>
+
+<!-- ============================================================
+     HOW TO ADD HER PHOTO (Google Drive):
+     1. Upload the photo to Google Drive
+     2. Right-click → Share → "Anyone with the link"
+     3. Copy the link. It looks like:
+        https://drive.google.com/file/d/FILE_ID_HERE/view?usp=sharing
+     4. Take only the FILE_ID_HERE part and paste it into the
+        PHOTO_URL below in this format:
+        https://drive.google.com/thumbnail?id=FILE_ID_HERE&sz=w1000
+     5. Or just paste any direct image URL (ending .jpg/.png)
+     ============================================================ -->
+<script>
+  // 👇 PASTE YOUR IMAGE LINK BETWEEN THE QUOTES 👇
+  const PHOTO_URL = "";
+  // Example:
+  // const PHOTO_URL = "https://drive.google.com/thumbnail?id=1AbC2dEfGh3IjKl&sz=w1000";
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --night:   #1d1230;
+    --plum:    #2e1d47;
+    --violet:  #6d4e8c;
+    --rose:    #f4b8cf;
+    --gold:    #e9c46a;
+    --cream:   #fff6ee;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:'Jost',sans-serif;
+    background: radial-gradient(ellipse at 50% -10%, var(--plum) 0%, var(--night) 60%);
+    color: var(--cream);
+    overflow-x:hidden;
+    min-height:100vh;
+  }
+  ::selection{ background:var(--rose); color:var(--night); }
+
+  /* ---------- floating petals & stars ---------- */
+  .sky{ position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .star{
+    position:absolute; border-radius:50%;
+    background:var(--cream); opacity:.7;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle{ 0%,100%{opacity:.15; transform:scale(.7);} 50%{opacity:.9; transform:scale(1);} }
+  .petal{
+    position:absolute; top:-30px;
+    width:14px; height:14px;
+    background: linear-gradient(135deg, var(--rose), #e88db5);
+    border-radius: 60% 0 60% 0;
+    opacity:.8;
+    animation: fall linear infinite;
+  }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(540deg); opacity:.2; }
+  }
+
+  main{ position:relative; z-index:1; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+    padding: 4rem 1.5rem 3rem;
+  }
+  .eyebrow{
+    letter-spacing:.45em; text-transform:uppercase;
+    font-size:.75rem; font-weight:500; color:var(--gold);
+    margin-bottom:1.4rem;
+    animation: rise 1.2s .2s both;
+  }
+  h1{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic; font-weight:600;
+    font-size: clamp(2.8rem, 9vw, 6.2rem);
+    line-height:1.05;
+    background: linear-gradient(120deg, var(--cream) 20%, var(--rose) 50%, var(--gold) 85%);
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  h1 .name{ display:block; }
+  h1 .name span{
+    display:inline-block;
+    animation: rise .9s both;
+  }
+  @keyframes rise{
+    from{ opacity:0; transform: translateY(28px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  .hero-sub{
+    margin-top:1.6rem; max-width:34rem;
+    font-weight:300; font-size:1.05rem; line-height:1.8;
+    color:#e9dff3;
+    animation: rise 1.2s 1.4s both;
+  }
+
+  /* ---------- photo frame ---------- */
+  .frame-wrap{
+    margin-top:3rem;
+    animation: rise 1.2s 1.8s both;
+  }
+  .frame{
+    position:relative;
+    width:min(320px, 78vw);
+    aspect-ratio: 4/5;
+    border-radius: 160px 160px 22px 22px;   /* arch — like a temple doorway */
+    padding:10px;
+    background: linear-gradient(160deg, var(--gold), #b98a3a 45%, var(--rose));
+    box-shadow: 0 24px 60px rgba(0,0,0,.45), 0 0 80px rgba(244,184,207,.15);
+  }
+  .frame-inner{
+    width:100%; height:100%;
+    border-radius: 150px 150px 14px 14px;
+    overflow:hidden;
+    background: var(--plum);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .frame-inner img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .photo-placeholder{
+    text-align:center; padding:1.5rem; color:#bfa8d8;
+    font-size:.9rem; line-height:1.7; font-weight:300;
+  }
+  .photo-placeholder .heart{
+    font-size:2.6rem; display:block; margin-bottom:.6rem;
+    animation: beat 1.6s ease-in-out infinite;
+  }
+  @keyframes beat{ 0%,100%{transform:scale(1);} 25%{transform:scale(1.15);} 40%{transform:scale(1);} }
+  .frame-caption{
+    margin-top:1rem; text-align:center;
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:1.15rem; color:var(--rose);
+  }
+
+  /* ---------- sections ---------- */
+  section{ padding: 5rem 1.5rem; max-width: 46rem; margin:0 auto; }
+  .section-title{
+    font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600;
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    text-align:center; color:var(--gold);
+    margin-bottom:2.2rem;
+  }
+  .divider{
+    width:80px; height:1px; margin:.9rem auto 0;
+    background: linear-gradient(90deg, transparent, var(--rose), transparent);
+  }
+
+  /* letter */
+  .letter{
+    background: rgba(255,246,238,.045);
+    border:1px solid rgba(244,184,207,.25);
+    border-radius: 18px;
+    padding: 2.2rem 1.8rem;
+    font-weight:300; font-size:1.05rem; line-height:2;
+    color:#efe4f6;
+    backdrop-filter: blur(4px);
+  }
+  .letter p + p{ margin-top:1.1rem; }
+  .letter .sign{
+    margin-top:1.6rem; text-align:right;
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:1.3rem; color:var(--rose);
+  }
+
+  /* wishes */
+  .wishes{ display:grid; gap:1rem; }
+  .wish{
+    display:flex; gap:1rem; align-items:flex-start;
+    background: rgba(255,246,238,.04);
+    border:1px solid rgba(233,196,106,.18);
+    border-radius:14px; padding:1.1rem 1.3rem;
+    opacity:0; transform:translateY(20px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .wish.show{ opacity:1; transform:none; }
+  .wish .icon{ font-size:1.4rem; line-height:1.4; }
+  .wish p{ font-weight:300; line-height:1.75; color:#eadff3; }
+
+  /* cake */
+  .cake-zone{ text-align:center; }
+  .cake{
+    position:relative; width:220px; margin: 2.5rem auto 0;
+    cursor:pointer; user-select:none;
+  }
+  .tier{ border-radius:10px 10px 4px 4px; margin:0 auto; position:relative; }
+  .tier.top{ width:120px; height:52px; background:linear-gradient(#f8cfe0,#e9a8c6); }
+  .tier.mid{ width:170px; height:58px; background:linear-gradient(#e9c46a,#d3a94c); }
+  .tier.base{ width:220px; height:64px; background:linear-gradient(#6d4e8c,#553a72); border-radius:10px 10px 12px 12px; }
+  .drip{
+    position:absolute; top:0; left:0; right:0; height:14px;
+    background:
+      radial-gradient(circle at 12% 100%, var(--cream) 7px, transparent 8px),
+      radial-gradient(circle at 34% 100%, var(--cream) 9px, transparent 10px),
+      radial-gradient(circle at 55% 100%, var(--cream) 6px, transparent 7px),
+      radial-gradient(circle at 76% 100%, var(--cream) 9px, transparent 10px),
+      radial-gradient(circle at 94% 100%, var(--cream) 6px, transparent 7px),
+      linear-gradient(var(--cream), var(--cream));
+    background-repeat:no-repeat;
+  }
+  .candles{
+    position:absolute; top:-46px; left:50%; transform:translateX(-50%);
+    display:flex; gap:16px;
+  }
+  .candle{ width:8px; height:34px; border-radius:3px;
+    background: repeating-linear-gradient(45deg, var(--rose) 0 6px, var(--cream) 6px 12px);
+    position:relative; }
+  .flame{
+    position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+    width:12px; height:16px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+    background: radial-gradient(circle at 50% 70%, #fff3c4, var(--gold) 60%, #e07b39);
+    animation: flicker .35s ease-in-out infinite alternate;
+    transition: opacity .4s, transform .4s;
+  }
+  @keyframes flicker{ from{transform:translateX(-50%) scale(1);} to{transform:translateX(-52%) scale(1.12) rotate(-3deg);} }
+  .cake.blown .flame{ opacity:0; transform:translateX(-50%) scale(.2); }
+  .cake-hint{ margin-top:1.4rem; font-size:.9rem; color:#c9b6de; font-weight:300; }
+  .wish-made{
+    margin-top:1rem; font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:1.35rem; color:var(--gold);
+    opacity:0; transition: opacity 1s;
+  }
+  .wish-made.show{ opacity:1; }
+
+  footer{
+    text-align:center; padding: 3rem 1.5rem 4rem;
+    font-family:'Cormorant Garamond',serif; font-style:italic;
+    font-size:1.2rem; color:var(--rose);
+  }
+  footer small{ display:block; margin-top:.8rem; font-family:'Jost'; font-style:normal; font-size:.75rem; letter-spacing:.3em; text-transform:uppercase; color:#9c86b8; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    .wish{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky"></div>
+
+<main>
+  <!-- HERO -->
+  <div class="hero">
+    <p class="eyebrow">✦ July · A day made of light ✦</p>
+    <h1>
+      Happy Birthday,
+      <span class="name" id="name"></span>
+    </h1>
+    <p class="hero-sub">
+      Today the world quietly celebrates the day you arrived in it —
+      and I get to celebrate the day my whole life changed for the better.
+    </p>
+
+    <!-- PHOTO -->
+    <div class="frame-wrap">
+      <div class="frame">
+        <div class="frame-inner" id="frameInner">
+          <div class="photo-placeholder">
+            <span class="heart">♡</span>
+            Her photo goes here.<br>
+            Paste your Google Drive image link<br>
+            in the <b>PHOTO_URL</b> at the top of this file.
+          </div>
+        </div>
+      </div>
+      <p class="frame-caption">Sri Varshini — my favourite person</p>
+    </div>
+  </div>
+
+  <!-- LETTER -->
+  <section>
+    <h2 class="section-title">A little letter, from me to you</h2>
+    <div class="divider"></div>
+    <div class="letter" style="margin-top:2rem">
+      <p>Dear Sri Varshini,</p>
+      <p>
+        Some people count their blessings; I only have to say your name.
+        Your smile has a way of turning ordinary days into ones I never
+        want to end, and your kindness makes everyone around you a little
+        softer, a little braver.
+      </p>
+      <p>
+        On your birthday, I wish you everything you have ever quietly
+        hoped for — and a few beautiful things you haven't even thought
+        to wish for yet. May this new year of your life be gentle to you,
+        generous to you, and full of reasons to laugh.
+      </p>
+      <p>
+        Wherever this year takes you, know one thing for certain:
+        I'll be right there beside you, cheering the loudest.
+      </p>
+      <p class="sign">— Forever yours ♡</p>
+    </div>
+  </section>
+
+  <!-- WISHES -->
+  <section>
+    <h2 class="section-title">My wishes for you</h2>
+    <div class="divider"></div>
+    <div class="wishes" style="margin-top:2rem">
+      <div class="wish"><span class="icon">🌸</span><p>May your heart stay as soft and beautiful as it is today, no matter what the world brings.</p></div>
+      <div class="wish"><span class="icon">✨</span><p>May every dream you whisper at night find its way into your mornings.</p></div>
+      <div class="wish"><span class="icon">🕊️</span><p>May you always find peace on hard days and someone to share the good ones with — starting with me.</p></div>
+      <div class="wish"><span class="icon">🎁</span><p>May this year surprise you with joys you never saw coming.</p></div>
+      <div class="wish"><span class="icon">💜</span><p>And may you always know, without a single doubt, how deeply you are loved.</p></div>
+    </div>
+  </section>
+
+  <!-- CAKE -->
+  <section class="cake-zone">
+    <h2 class="section-title">Make a wish</h2>
+    <div class="divider"></div>
+    <div class="cake" id="cake" title="Tap to blow out the candles">
+      <div class="candles">
+        <div class="candle"><div class="flame"></div></div>
+        <div class="candle"><div class="flame"></div></div>
+        <div class="candle"><div class="flame"></div></div>
+      </div>
+      <div class="tier top"><div class="drip"></div></div>
+      <div class="tier mid"><div class="drip"></div></div>
+      <div class="tier base"><div class="drip"></div></div>
+    </div>
+    <p class="cake-hint">Tap the cake to blow out the candles 🎂</p>
+    <p class="wish-made" id="wishMade">Your wish is on its way to the stars ✨</p>
+  </section>
+
+  <footer>
+    Happy Birthday, Sri Varshini ♡
+    <small>with all my love, today &amp; always</small>
+  </footer>
+</main>
+
+<script>
+  /* ---- name letters animate in one by one ---- */
+  const nameText = "Sri Varshini ♡";
+  const nameEl = document.getElementById('name');
+  [...nameText].forEach((ch, i) => {
+    const s = document.createElement('span');
+    s.textContent = ch === ' ' ? '\u00A0' : ch;
+    s.style.animationDelay = (0.5 + i * 0.07) + 's';
+    nameEl.appendChild(s);
+  });
+
+  /* ---- photo from PHOTO_URL ---- */
+  if (typeof PHOTO_URL !== 'undefined' && PHOTO_URL.trim() !== "") {
+    const inner = document.getElementById('frameInner');
+    inner.innerHTML = "";
+    const img = document.createElement('img');
+    img.src = PHOTO_URL.trim();
+    img.alt = "Sri Varshini";
+    img.referrerPolicy = "no-referrer";
+    inner.appendChild(img);
+  }
+
+  /* ---- stars + petals ---- */
+  const sky = document.getElementById('sky');
+  for (let i = 0; i < 60; i++) {
+    const st = document.createElement('div');
+    st.className = 'star';
+    const size = Math.random() * 2.5 + 1;
+    st.style.width = st.style.height = size + 'px';
+    st.style.left = Math.random() * 100 + 'vw';
+    st.style.top = Math.random() * 100 + 'vh';
+    st.style.animationDelay = Math.random() * 3 + 's';
+    sky.appendChild(st);
+  }
+  for (let i = 0; i < 14; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.transform = 'scale(' + (0.6 + Math.random()) + ')';
+    sky.appendChild(p);
+  }
+
+  /* ---- reveal wishes on scroll ---- */
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, idx) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('show'), idx * 120);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.wish').forEach(w => observer.observe(w));
+
+  /* ---- blow out candles ---- */
+  const cake = document.getElementById('cake');
+  cake.addEventListener('click', () => {
+    cake.classList.add('blown');
+    document.getElementById('wishMade').classList.add('show');
+  });
+</script>
+</body>
+</html>
